@@ -1,7 +1,47 @@
-import { Button, Label, TextInput } from "flowbite-react";
-import { Link } from "react-router-dom";
+import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
+  const [formData, setFormData] = useState({});
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value.trim(),
+    });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.username || !formData.email || !formData.password) {
+      return setErrorMessage("Please fill out all fields");
+    }
+    try {
+      setLoading(true);
+      setErrorMessage(null);
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        return setErrorMessage(data.message);
+      }
+      setLoading(false);
+      if (res.ok) {
+        navigate("/sign-in");
+      }
+    } catch (error) {
+      setLoading(false);
+      setErrorMessage(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="min-h-screen mt-20">
       <div className="flex flex-col gap-8 p-8 md:flex-row">
@@ -23,7 +63,7 @@ const SignUp = () => {
           </p>
         </div>
         <div className="flex-1 px-8 ">
-          <form action="">
+          <form action="" onSubmit={handleSubmit}>
             <div className="my-2">
               <div className="mb-2 block">
                 <Label htmlFor="username" value="Username" />
@@ -31,15 +71,26 @@ const SignUp = () => {
               <TextInput
                 id="username"
                 type="text"
+                name="username"
                 required
                 placeholder="email"
+                value={formData.username}
+                onChange={handleChange}
               />
             </div>
             <div className="my-2">
               <div className="mb-2 block">
                 <Label htmlFor="email" value="Email" />
               </div>
-              <TextInput id="email" type="email" required placeholder="email" />
+              <TextInput
+                id="email"
+                type="email"
+                name="email"
+                value={formData.email}
+                required
+                placeholder="email"
+                onChange={handleChange}
+              />
             </div>
             <div className="my-2">
               <div className="mb-2 block">
@@ -48,16 +99,27 @@ const SignUp = () => {
               <TextInput
                 id="password"
                 type="password"
+                name="password"
+                value={formData.password}
                 required
                 placeholder="password"
+                onChange={handleChange}
               />
             </div>
             <Button
               type="submit"
               className="mt-4 w-full"
               gradientDuoTone="purpleToPink"
+              disabled={loading}
             >
-              Sign Up
+              {loading ? (
+                <>
+                  <Spinner size="sm" />
+                  <span className="ml-2">Loading...</span>
+                </>
+              ) : (
+                "Sign Up"
+              )}
             </Button>
             <p className="text-sm mt-4">
               Have an account?{" "}
@@ -69,6 +131,11 @@ const SignUp = () => {
               </Link>
             </p>
           </form>
+          {errorMessage && (
+            <Alert className="mt-5" color="failure">
+              {errorMessage}
+            </Alert>
+          )}
         </div>
       </div>
     </div>
