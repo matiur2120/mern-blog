@@ -44,7 +44,7 @@ const SignUp = () => {
   };
   return (
     <div className="min-h-screen mt-20">
-      <div className="flex flex-col gap-8 p-8 md:flex-row">
+      <div className="flex flex-col gap-8 p-8 md:flex-row w-11/12">
         <div className="flex-1 px-8">
           <Link
             to="/"
