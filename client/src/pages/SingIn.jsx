@@ -2,6 +2,7 @@ import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import OAuth from "../components/OAuth";
 import {
   signInFailure,
   signInStart,
@@ -110,6 +111,7 @@ const SignIn = () => {
                 "Sign In"
               )}
             </Button>
+            <OAuth />
             <p className="text-sm mt-4">
               Don't Have an account?{" "}
               <Link
