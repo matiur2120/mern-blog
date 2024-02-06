@@ -73,7 +73,7 @@ const SignUp = () => {
                 type="text"
                 name="username"
                 required
-                placeholder="email"
+                placeholder="username"
                 value={formData.username}
                 onChange={handleChange}
               />
