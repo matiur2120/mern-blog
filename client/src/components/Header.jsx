@@ -13,11 +13,7 @@ const Header = () => {
   const handleSignOut = () => {
     console.log("Sign out");
   };
-  const handleToggleTheme = () => {
-    dispatch(toggleTheme());
-    console.log("hello");
-    console.log(theme);
-  };
+
   return (
     <Navbar className="border-b-2">
       <Navbar.Brand
@@ -56,7 +52,14 @@ const Header = () => {
           <Dropdown
             arrowIcon={false}
             inline
-            label={<Avatar img={currentUser.profilePicture} rounded bordered />}
+            label={
+              <Avatar
+                alt="user"
+                img={currentUser?.profilePicture}
+                rounded
+                bordered
+              />
+            }
           >
             <Dropdown.Header>
               <span className="block text-sm">{currentUser.username}</span>
