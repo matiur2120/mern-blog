@@ -85,10 +85,10 @@ const DashProfile = () => {
           hidden
         />
         <div
-          className="relative overflow-hidden w-32 h-32 self-center cursor-pointer shadow-md  rounded-full"
+          className="relative  w-32 h-32 self-center cursor-pointer shadow-md   rounded-full"
           onClick={() => filePickerRef.current.click()}
         >
-          {imageFileUploadProgress && (
+          {imageFileUploadProgress > 0 && (
             <CircularProgressbar
               value={imageFileUploadProgress || 0}
               text={`${imageFileUploadProgress}%`}
