@@ -4,12 +4,14 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
+
 import { Alert, Button, Modal, TextInput } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { app } from "../firebase";
 import {
   deleteUserFailure,
@@ -22,7 +24,7 @@ import {
 } from "../redux/user/userSlice.js";
 
 const DashProfile = () => {
-  const { currentUser, error } = useSelector((state) => state.user);
+  const { currentUser, error, loading } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(0);
@@ -216,10 +218,26 @@ const DashProfile = () => {
           placeholder="password"
           onChange={handleChange}
         />
-        <Button type="submit" gradientDuoTone="purpleToBlue" outline>
-          Update
+        <Button
+          type="submit"
+          gradientDuoTone="purpleToBlue"
+          outline
+          disabled={loading || imageFileUploading}
+        >
+          {loading ? "Loading....." : "Update"}
         </Button>
       </form>
+      {currentUser?.isAdmin && (
+        <Link to="/create-post">
+          <Button
+            type="button"
+            gradientDuoTone="purpleToPink"
+            className="w-full mt-5"
+          >
+            Create a post
+          </Button>
+        </Link>
+      )}
       <div className="flex mt-5 justify-between">
         <span
           onClick={() => setShowModal(true)}
