@@ -4,20 +4,24 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { Alert, Button, TextInput } from "flowbite-react";
+import { Alert, Button, Modal, TextInput } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { app } from "../firebase";
 import {
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
   updateFailure,
   updateStart,
   updateSuccess,
 } from "../redux/user/userSlice.js";
 
 const DashProfile = () => {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, error } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(0);
@@ -26,6 +30,7 @@ const DashProfile = () => {
   const [imageFileUploading, setImageFileUploading] = useState(false);
   const [updateUserSuccess, setUpdateUserSuccess] = useState(false);
   const [updateUserError, setUpdateUserError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
   const filePickerRef = useRef();
   const handleImageChange = (e) => {
@@ -40,7 +45,7 @@ const DashProfile = () => {
       uploadeImage();
     }
   }, [imageFile]);
-  console.log(imageFileUploadProgress, imageFileUploadError);
+
   const uploadeImage = async () => {
     // service firebase.storage {
     //     match /b/{bucket}/o {
@@ -118,6 +123,23 @@ const DashProfile = () => {
       dispatch(updateFailure(error.message));
     }
   };
+  const handleDeleteUser = async () => {
+    setShowModal(false);
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        dispatch(deleteUserFailure(data.message));
+      } else {
+        dispatch(deleteUserSuccess(data));
+      }
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+    }
+  };
   return (
     <div className="max-w-lg mx-auto p-3 w-full mb-8">
       <h2 className="my-7 text-center font-semibold text-3xl">Profile</h2>
@@ -193,7 +215,12 @@ const DashProfile = () => {
         </Button>
       </form>
       <div className="flex mt-5 justify-between">
-        <span className="text-red-500 cursor-pointer">Dlete Account</span>
+        <span
+          onClick={() => setShowModal(true)}
+          className="text-red-500 cursor-pointer"
+        >
+          Dlete Account
+        </span>
         <span className="text-red-400 cursor-pointer">Sign out</span>
       </div>
       {updateUserSuccess && (
@@ -206,6 +233,36 @@ const DashProfile = () => {
           <span>{updateUserError}</span>
         </Alert>
       )}
+      {error && (
+        <Alert color="failure" className="mt-5">
+          {error}
+        </Alert>
+      )}
+
+      <Modal
+        show={showModal}
+        size="md"
+        onClose={() => setShowModal(false)}
+        popup
+      >
+        <Modal.Body>
+          <Modal.Header />
+          <div className="text-center">
+            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              Are you sure you want to delete your account?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="failure" onClick={handleDeleteUser}>
+                {"Yes, I'm sure"}
+              </Button>
+              <Button color="gray" onClick={() => setShowModal(false)}>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
