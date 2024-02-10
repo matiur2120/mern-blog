@@ -22,9 +22,17 @@ const Dashboard = () => {
         <DashSidebar />
       </div>
       {/* Profile */}
-      <div className="flex-1">{tab === "profile" && <DashProfile />}</div>
+      {tab === "posts" && (
+        <div className="flex-1">
+          <DashPosts />
+        </div>
+      )}
+      {tab === "profile" && (
+        <div className="flex-1">
+          <DashProfile />
+        </div>
+      )}
       {/* Posts */}
-      <div className="flex-1">{tab === "posts" && <DashPosts />}</div>
     </div>
   );
 };
