@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
+import DashPosts from "../components/DashPosts";
 import DashProfile from "../components/DashProfile";
 import DashSidebar from "../components/DashSidebar";
 
@@ -22,6 +23,8 @@ const Dashboard = () => {
       </div>
       {/* Profile */}
       <div className="flex-1">{tab === "profile" && <DashProfile />}</div>
+      {/* Posts */}
+      <div className="flex-1">{tab === "posts" && <DashPosts />}</div>
     </div>
   );
 };
