@@ -1,5 +1,6 @@
 import { Sidebar } from "flowbite-react";
 import { useEffect, useState } from "react";
+import { FaUsers } from "react-icons/fa";
 import { HiArrowRight, HiDocumentText, HiUser } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
@@ -35,6 +36,13 @@ const DashSidebar = () => {
         <Sidebar.Item icon={HiArrowRight} className="cursor-pointer">
           Sign Out
         </Sidebar.Item>
+        {currentUser?.isAdmin && (
+          <Link to="/dashboard?tab=users">
+            <Sidebar.Item active={tab === "users"} icon={FaUsers} as="div">
+              Users
+            </Sidebar.Item>
+          </Link>
+        )}
         {currentUser?.isAdmin && (
           <Link to="/dashboard?tab=posts">
             <Sidebar.Item

@@ -112,3 +112,13 @@ export const getUsers = async(req, res, next) =>{
         next(error.message)
     }
 }
+
+export const deleteUserByAdmin = async(req, res, next) =>{
+    try{
+        if(!req.user.isAdmin && req.params.userId !== req.user.id){
+            return next(errorHandler('401', 'You have no access delete the user'))
+        }
+         await User.findByIdAndDelete(req.params.deleteUserId);
+         res.status(200).json('The user has been deleted!')
+    }catch(error){next(error.message)}
+}
