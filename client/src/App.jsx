@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Projects from "./pages/Projects";
 import SignUp from "./pages/SignUp";
 import SingIn from "./pages/SingIn";
+import UpdatePost from "./pages/UpdatePost";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
         </Route>
         <Route element={<OnlyAdminPrivateRoute />}>
           <Route path="/create-post" element={<CreatePost />} />
+          <Route path="/update-post/:postId" element={<UpdatePost />} />
         </Route>
         <Route path="/projects" element={<Projects />} />
       </Routes>
