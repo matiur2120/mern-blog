@@ -28,7 +28,6 @@ const DashPosts = () => {
     };
     if (currentUser?.isAdmin) fetchPosts();
   }, [currentUser?._id, currentUser?.isAdmin]);
-  console.log(userPosts);
 
   const handleShowMore = async () => {
     const startIndex = userPosts.length;
@@ -94,18 +93,19 @@ const DashPosts = () => {
                   <Table.Cell>
                     {new Date(post.updatedAt).toLocaleDateString()}
                   </Table.Cell>
-                  <Link to="">
-                    <Table.Cell>
+
+                  <Table.Cell>
+                    <Link to={`/post/${post.slug}`}>
                       <img
                         src={post.image}
                         alt="post-image"
                         className="w-16 h-8"
                       />
-                    </Table.Cell>
-                  </Link>
+                    </Link>
+                  </Table.Cell>
 
                   <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    <Link to={`/posts/${post.slug}`}>{post.title}</Link>
+                    <Link to={`/post/${post.slug}`}>{post.title}</Link>
                   </Table.Cell>
 
                   <Table.Cell>{post.category}</Table.Cell>

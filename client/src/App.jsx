@@ -6,6 +6,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import CreatePost from "./pages/CreatePost";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
+import PostPage from "./pages/PostPage";
 import Projects from "./pages/Projects";
 import SignUp from "./pages/SignUp";
 import SingIn from "./pages/SingIn";
@@ -27,6 +28,7 @@ const App = () => {
           <Route path="/update-post/:postId" element={<UpdatePost />} />
         </Route>
         <Route path="/projects" element={<Projects />} />
+        <Route path="/post/:postSlug" element={<PostPage />} />
       </Routes>
       <Footer />
     </BrowserRouter>
