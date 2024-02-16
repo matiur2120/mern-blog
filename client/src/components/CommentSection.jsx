@@ -1,12 +1,14 @@
 import { Alert, Button, Textarea } from "flowbite-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import Comment from "./Comment";
 // eslint-disable-next-line react/prop-types
 const CommentSection = ({ postId }) => {
   const { currentUser } = useSelector((state) => state.user);
   const [comment, setComment] = useState("");
   const [commentError, setCommentError] = useState(null);
+  const [postComments, setPostComments] = useState([]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setCommentError(null);
@@ -23,14 +25,31 @@ const CommentSection = ({ postId }) => {
           postId,
         }),
       });
+      const data = await res.json();
       if (res.ok) {
         setComment("");
+        setPostComments([data, ...postComments]);
         setCommentError(null);
       }
     } catch (error) {
       setCommentError(error.message);
     }
   };
+  useEffect(() => {
+    const getComments = async () => {
+      try {
+        const res = await fetch(`/api/comment/getPostComments/${postId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setPostComments(data);
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    getComments();
+  }, [postId]);
+  console.log(postComments);
   return (
     <div className="max-w-2xl mx-auto w-full p-3">
       {currentUser ? (
@@ -78,6 +97,21 @@ const CommentSection = ({ postId }) => {
           </div>
           {commentError && <Alert color="failure">{commentError}</Alert>}
         </form>
+      )}
+      {postComments.length < 0 ? (
+        <p>No comment yet!</p>
+      ) : (
+        <>
+          <div className="flex text-sm items-center gap-2 my-5">
+            <p>Comments: </p>
+            <p className="border border-gray-400 px-2 rounded-sm">
+              {postComments.length}
+            </p>
+          </div>
+          {postComments.map((comment) => (
+            <Comment key={comment._id} comment={comment} />
+          ))}
+        </>
       )}
     </div>
   );
