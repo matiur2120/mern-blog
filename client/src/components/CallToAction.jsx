@@ -14,6 +14,7 @@ const CallToAction = () => {
         <Button
           gradientDuoTone="purpleToPink"
           className="w-full rounded-tl-xl rounded-bl-none"
+          size="xs"
         >
           100 js Projects Website
         </Button>
