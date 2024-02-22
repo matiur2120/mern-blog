@@ -76,6 +76,16 @@ const CommentSection = ({ postId }) => {
       console.log(error.message);
     }
   };
+  const handleUpdate = (commentId, editedContent) => {
+    setPostComments(
+      postComments.map((c) =>
+        c._id === commentId ? { ...c, content: editedContent } : c
+      )
+    );
+  };
+  const handleDelete = async (commentId) => {
+    console.log(commentId);
+  };
   return (
     <div className="max-w-2xl mx-auto w-full p-3">
       {currentUser ? (
@@ -139,6 +149,8 @@ const CommentSection = ({ postId }) => {
               key={comment._id}
               comment={comment}
               onLike={() => handleCommentLike(comment._id)}
+              onDelete={() => handleDelete(comment._id)}
+              onUpdate={handleUpdate}
             />
           ))}
         </>
