@@ -9,6 +9,8 @@ const CommentSection = ({ postId }) => {
   const [comment, setComment] = useState("");
   const [commentError, setCommentError] = useState(null);
   const [postComments, setPostComments] = useState([]);
+  console.log(comment);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setCommentError(null);
@@ -49,7 +51,31 @@ const CommentSection = ({ postId }) => {
     };
     getComments();
   }, [postId]);
-  console.log(postComments);
+  const handleCommentLike = async (commentId) => {
+    console.log(commentId);
+    try {
+      const res = await fetch(`/api/comment/likeComment/${commentId}`, {
+        method: "PUT",
+      });
+      if (res.ok) {
+        console.log("data updated succesf");
+        const data = await res.json();
+        setPostComments(
+          postComments.map((item) =>
+            item._id === commentId
+              ? {
+                  ...item,
+                  likes: data.likes,
+                  numberOfLikes: data.likes.length,
+                }
+              : item
+          )
+        );
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   return (
     <div className="max-w-2xl mx-auto w-full p-3">
       {currentUser ? (
@@ -109,10 +135,14 @@ const CommentSection = ({ postId }) => {
             </p>
           </div>
           {postComments.map((comment) => (
-            <Comment key={comment._id} comment={comment} />
+            <Comment
+              key={comment._id}
+              comment={comment}
+              onLike={() => handleCommentLike(comment._id)}
+            />
           ))}
         </>
-      )}
+      )}{" "}
     </div>
   );
 };

@@ -1,8 +1,12 @@
 import moment from "moment";
 import { useEffect, useState } from "react";
+import { FaThumbsUp } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 // eslint-disable-next-line react/prop-types
-const Comment = ({ comment }) => {
+const Comment = ({ comment, onLike }) => {
+  const { currentUser } = useSelector((state) => state.user);
+
   const { userId, content } = comment;
   const [user, setUser] = useState({});
 
@@ -20,7 +24,7 @@ const Comment = ({ comment }) => {
     };
     getUser();
   }, [userId]);
-  console.log(user);
+
   return (
     <div>
       <div className="flex gap-2 text-sm my-2 border-b dark:border-gray-600 py-5">
@@ -40,7 +44,23 @@ const Comment = ({ comment }) => {
           </div>
           <p className="text-gray-500 mb-2">{content}</p>
           <div>
-            <span></span>
+            <button
+              type="button"
+              onClick={onLike}
+              className={` hover:text-blue-500 ${
+                currentUser && comment.likes.includes(currentUser._id)
+                  ? "text-blue-500"
+                  : "text-gray-400"
+              }`}
+            >
+              <FaThumbsUp />
+            </button>
+            <p className="text-xs text-gray-400">
+              {comment.numberOfLikes > 0 &&
+                comment.numberOfLikes +
+                  " " +
+                  (comment.numberOfLikes === 1 ? "like" : "likes")}
+            </p>
           </div>
         </div>
       </div>
