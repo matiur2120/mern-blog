@@ -1,5 +1,6 @@
-import { Alert, Button, Textarea } from "flowbite-react";
+import { Alert, Button, Modal, Textarea } from "flowbite-react";
 import { useEffect, useState } from "react";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Comment from "./Comment";
@@ -9,7 +10,8 @@ const CommentSection = ({ postId }) => {
   const [comment, setComment] = useState("");
   const [commentError, setCommentError] = useState(null);
   const [postComments, setPostComments] = useState([]);
-  console.log(comment);
+  const [showModal, setShowModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -83,8 +85,23 @@ const CommentSection = ({ postId }) => {
       )
     );
   };
+
   const handleDelete = async (commentId) => {
-    console.log(commentId);
+    setShowModal(true);
+    setDeleteId(commentId);
+  };
+  const confirmDelte = async () => {
+    try {
+      const res = await fetch(`/api/comment/deleteComment/${deleteId}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setPostComments(postComments.filter((c) => c._id !== deleteId));
+        setShowModal(false);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
   return (
     <div className="max-w-2xl mx-auto w-full p-3">
@@ -155,6 +172,30 @@ const CommentSection = ({ postId }) => {
           ))}
         </>
       )}{" "}
+      <Modal
+        show={showModal}
+        size="md"
+        onClose={() => setShowModal(false)}
+        popup
+      >
+        <Modal.Body>
+          <Modal.Header />
+          <div className="text-center">
+            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              Are you sure you want to delete this comment?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="failure" onClick={confirmDelte}>
+                {"Yes, I'm sure"}
+              </Button>
+              <Button color="gray" onClick={() => setShowModal(false)}>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
