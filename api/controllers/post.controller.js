@@ -45,7 +45,7 @@ export const getposts = async(req, res, next) =>{
 
                 ]
             })
-        }).sort({updateAt: sortDirection}).skip(startIndex).limit(limit)
+        }).sort({updatedAt: sortDirection}).skip(startIndex).limit(limit)
         const totalPosts = await Post.countDocuments();
         const now = new Date();
         const oneMonthAgo = new Date(

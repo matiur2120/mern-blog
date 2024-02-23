@@ -2,11 +2,12 @@ import { Alert, Button, Modal, Textarea } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Comment from "./Comment";
 // eslint-disable-next-line react/prop-types
 const CommentSection = ({ postId }) => {
   const { currentUser } = useSelector((state) => state.user);
+  const navigate = useNavigate();
   const [comment, setComment] = useState("");
   const [commentError, setCommentError] = useState(null);
   const [postComments, setPostComments] = useState([]);
@@ -86,12 +87,16 @@ const CommentSection = ({ postId }) => {
     );
   };
 
-  const handleDelete = async (commentId) => {
-    setShowModal(true);
-    setDeleteId(commentId);
-  };
-  const confirmDelte = async () => {
+  // const handleDelete = async (commentId) => {
+  //   setShowModal(true);
+  //   setDeleteId(commentId);
+  // };
+  const handleDelete = async () => {
     try {
+      if (!currentUser) {
+        navigate("/sign-in");
+        return;
+      }
       const res = await fetch(`/api/comment/deleteComment/${deleteId}`, {
         method: "DELETE",
       });
@@ -166,7 +171,10 @@ const CommentSection = ({ postId }) => {
               key={comment._id}
               comment={comment}
               onLike={() => handleCommentLike(comment._id)}
-              onDelete={() => handleDelete(comment._id)}
+              onDelete={() => {
+                setDeleteId(comment._id);
+                setShowModal(true);
+              }}
               onUpdate={handleUpdate}
             />
           ))}
@@ -186,7 +194,7 @@ const CommentSection = ({ postId }) => {
               Are you sure you want to delete this comment?
             </h3>
             <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={confirmDelte}>
+              <Button color="failure" onClick={handleDelete}>
                 {"Yes, I'm sure"}
               </Button>
               <Button color="gray" onClick={() => setShowModal(false)}>
