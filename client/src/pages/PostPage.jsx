@@ -85,7 +85,7 @@ const PostPage = () => {
       <CommentSection postId={post._id} />
       <div className="flex flex-col justify-center items-center mb-5 max-w-4xl mx-auto">
         <h1 className="text-xl mt-5 font-bold">Recent Posts</h1>
-        <div className="flex gap-6 mt-5">
+        <div className="flex flex-col sm:flex-row gap-6 mt-5 px-5 sm:px-2">
           {recentPosts && recentPosts.length > 0
             ? recentPosts.map((p) => <PostCard key={p._id} post={p} />)
             : "No recent post"}
