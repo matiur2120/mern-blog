@@ -4,6 +4,7 @@ import { FaUsers } from "react-icons/fa";
 import {
   HiAnnotation,
   HiArrowRight,
+  HiChartPie,
   HiDocumentText,
   HiUser,
 } from "react-icons/hi";
@@ -26,6 +27,17 @@ const DashSidebar = () => {
   return (
     <Sidebar className="w-full md:w-56">
       <Sidebar.ItemGroup className="flex flex-col gap-1">
+        {currentUser?.isAdmin && (
+          <Link to="/dashboard?tab=dash">
+            <Sidebar.Item
+              active={tab === "dash" || !tab}
+              as="div"
+              icon={HiChartPie}
+            >
+              Dashboard
+            </Sidebar.Item>
+          </Link>
+        )}
         <Link to="/dashboard?tab=profile">
           <Sidebar.Item
             active={tab === "profile"}

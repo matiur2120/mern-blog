@@ -5,6 +5,7 @@ import DashPosts from "../components/DashPosts";
 import DashProfile from "../components/DashProfile";
 import DashSidebar from "../components/DashSidebar";
 import DashUsers from "../components/DashUsers";
+import DashboardComponent from "../components/DashboardComponent";
 
 const Dashboard = () => {
   const location = useLocation();
@@ -43,6 +44,11 @@ const Dashboard = () => {
       {tab === "comments" && (
         <div className="flex-1">
           <DashComments />
+        </div>
+      )}
+      {(tab === "dash" || !tab) && (
+        <div className="flex-1">
+          <DashboardComponent />
         </div>
       )}
     </div>
