@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 const PostCard = ({ post }) => {
   console.log(post);
   return (
-    <div className="group relative overflow-hidden w-full border h-[400px] p-2 rounded-lg">
+    <div className="group relative overflow-hidden w-full border h-[400px] p-2 rounded-lg max-w-[250px]">
       <Link to={`/post/${post.slug}`}>
         <img
           src={post.image}
           alt="covet photo"
-          className="h-[260px] w-full object-cover group-hover:h-[200px] transition-all duration-300 z-20"
+          className="h-[260px]  w-full object-cover group-hover:h-[200px] transition-all duration-300 z-20"
         />
       </Link>
       <div className="flex flex-col gap-2 pt-5">
