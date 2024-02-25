@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import OnlyAdminPrivateRoute from "./components/OnlyAdminPrivateRoute";
 import PrivateRoute from "./components/PrivateRoute";
 import ScrollToTop from "./components/ScrollToTop";
+import About from "./pages/About";
 import CreatePost from "./pages/CreatePost";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/sign-in" element={<SingIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/about" element={<About />} />
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
         </Route>
