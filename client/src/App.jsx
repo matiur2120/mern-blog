@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import PostPage from "./pages/PostPage";
 import Projects from "./pages/Projects";
+import { Search } from "./pages/Search";
 import SignUp from "./pages/SignUp";
 import SingIn from "./pages/SingIn";
 import UpdatePost from "./pages/UpdatePost";
@@ -22,6 +23,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/sign-in" element={<SingIn />} />
         <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/search" element={<Search />} />
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
         </Route>
